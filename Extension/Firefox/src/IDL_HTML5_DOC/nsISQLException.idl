@@ -1,0 +1,13 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(765f9200-47cc-48c4-a80b-e107260c781d)]
+interface nsISQLException : nsISupports {
+
+  readonly attribute long code;
+
+  readonly attribute DOMString message;
+
+  readonly attribute DOMString state;
+
+};

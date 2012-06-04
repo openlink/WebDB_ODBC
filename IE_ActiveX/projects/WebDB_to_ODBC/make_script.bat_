@@ -1,0 +1,1 @@
+type script.js| jscode > script.h

@@ -1,0 +1,42 @@
+#include "nsISupports.idl"
+
+
+interface nsIVariant;
+
+[scriptable, uuid(d2e3fdbf-c025-4653-9d74-dcb227a641e1)]
+interface nsISQLParameterArray : nsISupports {
+
+  readonly attribute unsigned short length;
+
+  void setData(in unsigned short aParamIndex, in nsIVariant aValue);
+
+  void setString(in unsigned short aParamIndex, in AString aValue);
+
+  void setLongString(in unsigned short aParamIndex, in AString aValue);
+
+  void setFloat(in unsigned short aParamIndex, in float aValue);
+
+  void setDouble(in unsigned short aParamIndex, in double aValue);
+
+  void setInt16(in unsigned short aParamIndex, in short aValue);
+
+  void setInt32(in unsigned short aParamIndex, in long aValue);
+
+  void setInt64(in unsigned short aParamIndex, in long long aValue);
+
+  void setNull(in unsigned short aParamIndex);
+
+  void setBlob(in unsigned short aParamIndex,
+                         [array,const,size_is(aValueSize)] in octet aValue,
+                         in unsigned long aValueSize);
+
+  void setBinary(in unsigned short aParamIndex,
+                         [array,const,size_is(aValueSize)] in octet aValue,
+                         in unsigned long aValueSize);
+
+  //next for internal using only (just a trick)
+  readonly attribute nsIVariant data;
+  readonly attribute nsIVariant islong;
+  readonly attribute nsIVariant dtype;
+
+};

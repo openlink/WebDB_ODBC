@@ -1,0 +1,32 @@
+{
+   "name": "OpenLink HTML5 WebDB-to-ODBC Bridge",
+   "version": "1.0.3",
+   "description": "Enables ODBC use by/through HTML5 WebDB Database interfaces.",
+   "icons": {
+      "32": "chrome/content/img/icon32.png",
+      "48": "chrome/content/img/icon48.png",
+      "128": "chrome/content/img/icon128.png"
+   },
+   "content_scripts": [
+     {
+       "matches": ["http://*/*","https://*/*","file:///*"],
+       "run_at": "document_start",
+       "js": ["chrome/content/bg.js"],
+       "all_frames": true
+     }
+   ],
+   "plugins": [ 
+     {
+      "path": "plugin/npiodbc_chrome.dll",
+      "public": true
+     },
+     {
+      "path": "plugin/NPIODBC_Chrome.plugin",
+      "public": true
+     },
+     {
+      "path": "plugin/libnpiodbc_chrome.so",
+      "public": true
+     }
+     ]
+}

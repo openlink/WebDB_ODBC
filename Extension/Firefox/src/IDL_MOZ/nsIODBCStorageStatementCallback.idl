@@ -1,0 +1,46 @@
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+#include "nsISupports.idl"
+
+interface nsIODBCStorageResultSet;
+interface nsIODBCStorageError;
+
+[scriptable, uuid(7e4b5ee5-3a6e-4818-9125-438010b73341)]
+interface nsIODBCStorageStatementCallback : nsISupports {
+
+  /**
+   * Called when some result is obtained from the database.  This function can
+   * be called more than once with a different storageIResultSet each time for
+   * any given asynchronous statement.
+   *
+   * @param aResultSet
+   *        The result set containing the data from the database.
+   */
+  void handleResult(in nsIODBCStorageResultSet aResultSet);
+
+  /**
+   * Called when some error occurs while executing the statement.  This function
+   * may be called more than once with a different storageIError each time for
+   * any given asynchronous statement.
+   *
+   * @param aError
+   *        An object containing information about the error.
+   */
+  void handleError(in nsIODBCStorageError aError);
+
+  /**
+   * Called when the statement has finished executing.  This function will only
+   * be called once for any given asynchronous statement.
+   *
+   * @param aReason
+   *        Indicates if the statement is no longer executing because it either
+   *        finished (REASON_FINISHED), was canceled (REASON_CANCELED), or
+   *        a fatal error occurred (REASON_ERROR).
+   */
+  const unsigned short REASON_FINISHED = 0;
+  const unsigned short REASON_CANCELED = 1;
+  const unsigned short REASON_ERROR = 2;
+  void handleCompletion(in unsigned short aReason);
+};

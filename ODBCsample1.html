@@ -1,0 +1,312 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251">
+<!-- XXX keep in sync with stuff in pre tag below -->
+
+<!--[if IE]>
+  <object id="webdb-odbc" type="application/iodbc" width="1" height="1">
+  </object>
+<![endif]-->
+
+<script>
+
+
+function clear_log() {
+  var myBox = document.getElementById("log_id");
+  myBox.value = "";
+}
+
+function println(s) {
+  var myBox = document.getElementById("log_id");
+  myBox.value += s+"\n";
+}
+
+
+var dsnloaded = false;
+
+function initDSN() {
+  try {
+  if (!WorkerUtils)
+    fFAIL = true;
+  } catch (ex) {
+    alert("Could not locate Openlink XPCOM component!\n"+ex);
+    return;
+  }
+  if (!dsnloaded) {
+     var lst = WorkerUtils.getDataSources();
+     var box = document.getElementById("dsnlst");
+     box.options.length = 0;
+
+     for(var i=0; i < lst.length; i++) {
+       box.options[i] = new Option(lst[i], lst[i]);
+       if (lst[i] == "virt")
+         box.options.selectedIndex = i;
+       else
+         box.options.selectedIndex = 0;
+     }
+     dsnloaded = true;
+  }
+}
+
+
+
+function Test_Sync()
+{
+  var fFAIL = false;
+  try {
+
+
+  clear_log();
+
+  try {
+  if (!WorkerUtils)
+    fFAIL = true;
+  } catch (ex) {
+    alert("Could not locate Openlink XPCOM component!\n"+ex);
+    return;
+  }
+
+  var dsn = "DSN="+document.getElementById('dsnlst').value+
+            ";UID="+document.getElementById('uid').value+
+            ";PWD="+document.getElementById('pwd').value;
+
+  var db = WorkerUtils.openDatabaseSync(dsn, "", "", 0);
+
+   println("Start Drop table");
+   db.transaction({
+     handleEvent: function(trans)
+     {
+	try {
+          trans.executeSql("drop table test");
+	} catch (e) {
+	}
+
+     }}
+     );
+   println("End Drop table");
+
+   println("Start Create table");
+   db.transaction({
+     handleEvent: function(trans)
+     {
+	try {
+          trans.executeSql(
+            "CREATE TABLE test (" +
+              "id INTEGER PRIMARY KEY, " +
+              "string VARCHAR(20), " +
+              "number DOUBLE PRECISION, " +
+              "nuller VARCHAR(20) " +
+              ")"
+          );
+	} catch (e) {
+	  alert("Error="+e);
+          fFAIL = true;
+	}
+     }});
+   println("End Create table");
+
+   var arr=[2, "str1", 12345.56, null];
+   
+   db.transaction({
+     handleEvent: function(trans)
+     {
+	try {
+          var ret = trans.executeSql("insert into test values(1, 'str0',11111.22, NULL)");
+          println("INSERTED res.rowsAffected="+ret.rowsAffected);
+
+          ret = trans.executeSql("insert into test values(?,?,?,?)", arr);
+          println("INSERTED res.rowsAffected="+ret.rowsAffected);
+
+          var res = trans.executeSql("select * from test");
+          var myrows = res.rows;
+	  println("res.rows.length="+myrows.length);
+	  println("==============================");
+	  println("result access by index");
+	  println("==============================");
+	  for(var i=0; i< myrows.length; i++) {
+	    var cols = myrows.item(i);
+	    for (var col in cols) {
+	      println(">"+cols[col]);
+	    
+	    }
+	    println("------");
+	  }
+	  println("==============================");
+	  println("result access by name");
+	  println("==============================");
+	  for(var i=0; i< myrows.length; i++) {
+	    var cols = myrows.item(i);
+	    println(">>>"+cols.id);
+	    println(">>>"+cols.string);
+	    println(">>>"+cols.number);
+	    println(">>>"+cols.nuller);
+	    println("------");
+	  }
+	  println("==============================");
+	} catch (e) {
+	  alert(e);
+          fFAIL = true;
+	}
+     }});
+
+  } catch (e) {
+    alert(e)
+    fFAIL = true;
+  }
+  if (fFAIL)
+    println("FINISHED with FAILURE");
+  else
+    println("FINISHED with SUCCESS");
+}
+
+
+
+
+function Test_Async() {
+
+  var fFAIL = false;
+
+  try {
+
+
+  clear_log();
+
+  try {
+  if (!WorkerUtils)
+    fFAIL = true;
+  } catch (ex) {
+    alert("Could not locate Openlink XPCOM component!\n"+ex);
+    return;
+  }
+
+  var dsn = "DSN="+document.getElementById('dsnlst').value+
+            ";UID="+document.getElementById('uid').value+
+            ";PWD="+document.getElementById('pwd').value;
+
+  var db = WorkerUtils.openDatabase(dsn, "", "", 0);
+
+   var hErr = {
+     handleEvent: function(err) { println(err); println("Error"+err.message); fFAIL=true;}
+   };
+
+   var hSucc = {
+     handleEvent: function() { println("=Success="); }
+   };
+
+   db.transaction({
+     handleEvent: function(trans)
+     {
+          trans.executeSql("drop table test");
+     }});
+
+   db.transaction({
+     handleEvent: function(trans)
+     {
+          trans.executeSql(
+            "CREATE TABLE test (" +
+              "id INTEGER PRIMARY KEY, " +
+              "string VARCHAR(20), " +
+              "number DOUBLE PRECISION, " +
+              "nuller VARCHAR(20) " +
+              ")"
+          );
+     }}, hErr);
+
+   var arr=[2,"str1", 12345.56, null];
+   
+   var hErr1 = {
+     handleEvent: function(tr, err) { println(err); println("Error"+err.message); fFAIL=true; return true; }
+   };
+   
+   var hSucc1 = {
+     handleEvent: function(tr, rs) { 
+       if (rs.rowsAffected != -1)
+     	  println("=Success= RowsAffected="+rs.rowsAffected); 
+
+      var myrows = rs.rows;
+       if (myrows && myrows.length > 0)
+       {	
+	  println("=Success= ResultSet");
+	  println("res.rows.length="+myrows.length);
+	  println("==============================");
+	  println("result access by index");
+	  println("==============================");
+	  for(var i=0; i< myrows.length; i++) {
+	    var cols = myrows.item(i);
+	    for (var col in cols) {
+	      println(">"+cols[col]);
+	    
+	    }
+	    println("------");
+	  }
+	  println("==============================");
+	  println("result access by name");
+	  println("==============================");
+	  for(var i=0; i< myrows.length; i++) {
+	    var cols = myrows.item(i);
+	    println(">>>"+cols.id);
+	    println(">>>"+cols.string);
+	    println(">>>"+cols.number);
+	    println(">>>"+cols.nuller);
+	    println("------");
+	  }
+	  println("==============================");
+       };
+     }
+   };
+   
+   db.transaction({
+     handleEvent: function(trans)
+     {
+          trans.executeSql("insert into test values(1,'str0',11111.22, NULL)",
+          	[], hSucc1, hErr1);
+          trans.executeSql("insert into test values(?,?,?,?)",
+                arr, hSucc1, hErr1);
+
+          trans.executeSql("select * from test", [], hSucc1, hErr1);
+     
+          println("FINISHED ASYNC PART");
+          if (fFAIL)
+            println("FINISHED FAILURE");
+          else
+            println("FINISHED SUCCESS");
+     }}, hErr);
+
+     
+  } catch (e) {
+    alert(e)
+    fFAIL = true;
+  }
+  println("FINISHED SYNC PART");
+}
+
+
+</script>
+
+</head><body><p>
+</p><form name="form1">
+<br>
+DSN :
+  <SELECT id="dsnlst" style="width: 200px;" onfocus="initDSN()">
+   <OPTION selected>virt</OPTION>
+  </SELECT>
+User:
+<input id="uid" value="dba" style="width: 100px;" type="text">
+Password:
+<input id="pwd" value="dba" style="width: 100px;" type="password">
+
+<br>
+<br>
+<textarea id="log_id" name="log_text" style="width: 100%;" rows="10"></textarea>
+<br><br>
+<input value="Test Sync Database calls" onclick="Test_Sync();" 
+type="button">
+<br>
+<input value="Test Async Database calls" onclick="Test_Async();" 
+type="button">
+<br>
+
+</form>
+
+<hr>
+
+</body></html>

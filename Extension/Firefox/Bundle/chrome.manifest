@@ -1,0 +1,58 @@
+content	iodbcstorage	chrome/content/
+
+component {cc1be662-adfd-4505-aed2-b41f23e5b3ee} components2/nsWebSQL.js
+contract @openlinksw.com/WebSQLDatabase;1 {cc1be662-adfd-4505-aed2-b41f23e5b3ee}
+category JavaScript-global-property WorkerUtils @openlinksw.com/WebSQLDatabase;1
+
+interfaces components2/nsIDatabase.xpt
+interfaces components2/nsIDatabaseCallback.xpt
+interfaces components2/nsIDatabaseSync.xpt
+interfaces components2/nsIODBCStorageConnection.xpt
+interfaces components2/nsIODBCStorageError.xpt
+interfaces components2/nsIODBCStoragePendingStatement.xpt
+interfaces components2/nsIODBCStorageResultSet.xpt
+interfaces components2/nsIODBCStorageRow.xpt
+interfaces components2/nsIODBCStorageService.xpt
+interfaces components2/nsIODBCStorageStatement.xpt
+interfaces components2/nsIODBCStorageStatementCallback.xpt
+interfaces components2/nsIODBCStorageValueArray.xpt
+interfaces components2/nsISQLError.xpt
+interfaces components2/nsISQLException.xpt
+interfaces components2/nsISQLParameterArray.xpt
+interfaces components2/nsISQLResultSet.xpt
+interfaces components2/nsISQLResultSetMetaData.xpt
+interfaces components2/nsISQLResultSetRowList.xpt
+interfaces components2/nsISQLStatementCallback.xpt
+interfaces components2/nsISQLStatementErrorCallback.xpt
+interfaces components2/nsISQLTransaction.xpt
+interfaces components2/nsISQLTransactionCallback.xpt
+interfaces components2/nsISQLTransactionErrorCallback.xpt
+interfaces components2/nsISQLTransactionSync.xpt
+interfaces components2/nsISQLTransactionSyncCallback.xpt
+interfaces components2/nsISQLVoidCallback.xpt
+interfaces components2/nsIWorkerUtilsDatabase.xpt
+
+binary-component platform2/Darwin_x86-gcc3/openlink_odbc.dylib ABI=Darwin_x86-gcc3       appversion<6.-1
+binary-component platform2/Darwin_x86-gcc3/openlink_odbc6.dylib ABI=Darwin_x86-gcc3      appversion>6.-1
+binary-component platform2/Darwin_x86-gcc3/openlink_odbc7.dylib ABI=Darwin_x86-gcc3      appversion>7.-1
+binary-component platform2/Darwin_x86-gcc3/openlink_odbc8.dylib ABI=Darwin_x86-gcc3      appversion>=8.0a2
+
+binary-component platform2/Darwin_x86_64-gcc3/openlink_odbc.dylib ABI=Darwin_x86_64-gcc3  appversion<6.-1
+binary-component platform2/Darwin_x86_64-gcc3/openlink_odbc6.dylib ABI=Darwin_x86_64-gcc3 appversion>6.-1
+binary-component platform2/Darwin_x86_64-gcc3/openlink_odbc7.dylib ABI=Darwin_x86_64-gcc3 appversion>7.-1
+binary-component platform2/Darwin_x86_64-gcc3/openlink_odbc8.dylib ABI=Darwin_x86_64-gcc3 appversion>=8.0a2
+
+binary-component platform2/Linux_x86-gcc3/openlink_odbc.so ABI=Linux_x86-gcc3            appversion<6.-1
+binary-component platform2/Linux_x86-gcc3/openlink_odbc6.so ABI=Linux_x86-gcc3           appversion>6.-1
+binary-component platform2/Linux_x86-gcc3/openlink_odbc7.so ABI=Linux_x86-gcc3           appversion>7.-1
+binary-component platform2/Linux_x86-gcc3/openlink_odbc8.so ABI=Linux_x86-gcc3           appversion>=8.0a2
+
+binary-component platform2/Linux_x86_64-gcc3/openlink_odbc.so ABI=Linux_x86_64-gcc3      appversion<6.-1
+binary-component platform2/Linux_x86_64-gcc3/openlink_odbc6.so ABI=Linux_x86_64-gcc3     appversion>6.-1
+binary-component platform2/Linux_x86_64-gcc3/openlink_odbc7.so ABI=Linux_x86_64-gcc3     appversion>7.-1
+binary-component platform2/Linux_x86_64-gcc3/openlink_odbc7.so ABI=Linux_x86_64-gcc3     appversion>=8.0a2
+
+binary-component platform2/WINNT_x86-msvc/openlink_odbc.dll ABI=WINNT_x86-msvc           appversion<6.-1
+binary-component platform2/WINNT_x86-msvc/openlink_odbc6.dll ABI=WINNT_x86-msvc          appversion>6.-1
+binary-component platform2/WINNT_x86-msvc/openlink_odbc7.dll ABI=WINNT_x86-msvc          appversion>7.-1
+binary-component platform2/WINNT_x86-msvc/openlink_odbc8.dll ABI=WINNT_x86-msvc          appversion>=8.0a2

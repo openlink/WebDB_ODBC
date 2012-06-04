@@ -1,0 +1,56 @@
+/* -*- Mode: idl; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+
+#include "nsISupports.idl"
+
+interface nsIODBCStorageConnection;
+interface nsIVariant;
+
+/**
+ * The nsIODBCStorageService interface is intended to be implemented by
+ * a service that can create storage connections (nsIStorageConnection)
+ * to either a well-known profile database or to a specific database file.
+ *
+ * This is the only way to open a database connection.
+ */
+[scriptable, uuid(be9effb0-9b42-4258-b38e-2f3ce2aecac7)]
+interface nsIODBCStorageService : nsISupports {
+  /**
+   * Get a connection to a named special database storage.
+   *
+   * @param aStorageKey a string key identifying the type of storage
+   * requested.  Valid values include: "profile", "memory".
+   *
+   * @see openDatabase for restrictions on how database connections may be
+   * used. For the profile database, you should only access it from the main
+   * thread since other callers may also have connections.
+   *
+   * @returns a new nsIStorageConnection for the requested
+   * storage database.
+   *
+   * @throws NS_ERROR_INVALID_ARG if aStorageKey is invalid.
+   */
+  nsIODBCStorageConnection openDatabase(in AString DSN, in AString UID, in AString PWD);
+
+  nsIODBCStorageConnection openDriverDatabase(in AString connString);
+
+
+  /**
+   * The last ODBC error code.
+   */
+  readonly attribute long lastErrorCode;
+
+  /**
+   * The last ODBC error as a string 
+   */
+  readonly attribute AString lastErrorString;
+
+  /**
+   * The last ODBC error as a string 
+   */
+  readonly attribute AString lastErrorState;
+
+
+  nsIVariant getDataSource(in boolean getFirst);
+
+};
+

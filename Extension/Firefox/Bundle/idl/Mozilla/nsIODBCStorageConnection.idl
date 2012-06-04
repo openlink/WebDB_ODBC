@@ -1,0 +1,263 @@
+/* -*- Mode: idl; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+
+#include "nsISupports.idl"
+
+interface nsIODBCStorageStatementCallback;
+interface nsIODBCStoragePendingStatement;
+interface nsIODBCStorageStatement;
+interface nsIVariant;
+
+/**
+ * nsIODBCStorageConnection represents a database connection attached to
+ * a specific file or to the in-memory data storage.  It is the
+ * primary interface for interacting with a database, including
+ * creating prepared statements, executing SQL, and examining database
+ * errors.
+ *
+ * @threadsafe
+ */
+[scriptable, uuid(21cf14cf-fd87-47a7-be9b-7dba19c51106)]
+interface nsIODBCStorageConnection : nsISupports {
+  /*
+   * Initialization and status
+   */
+
+  /**
+   * Closes a database connection.  C++ callers should simply set the database
+   * variable to NULL.
+   */
+   void close();
+
+  /**
+   * Indicates if the connection is open and ready to use.  This will be false
+   * if the connection failed to open, or it has been closed.
+   */
+  readonly attribute boolean connectionReady;
+
+  /**
+   * The current database nsIFile.  Null if the database
+   * connection refers to an in-memory database.
+   */
+  readonly attribute AString DSN;
+  readonly attribute AString PWD;
+  readonly attribute AString UID;
+
+  readonly attribute AString connString;
+
+  /**
+   * lastInsertRowID returns the row ID from the last INSERT
+   * operation.
+   */
+  readonly attribute long long lastInsertRowID;
+
+  /**
+   * The last ODBC error code.
+   */
+  readonly attribute long lastErrorCode;
+
+  /**
+   * The last ODBC error as a string 
+   */
+  readonly attribute AString lastErrorString;
+
+  /**
+   * The last ODBC error as a string 
+   */
+  readonly attribute AString lastErrorState;
+
+  /**
+   * The schema version of the database.  This should not be used until the 
+   * database is ready.  The schema will be reported as zero if it is not set.
+   */
+  attribute long schemaVersion;
+
+  attribute boolean readOnlyMode;
+
+  /*
+   * Statement creation
+   */
+
+  /**
+   * Create a nsIStorageStatement for the given SQL expression.  The
+   * expression may use ? to indicate sequential numbered arguments,
+   * ?1, ?2 etc. to indicate specific numbered arguments or :name and 
+   * $var to indicate named arguments.
+   *
+   * @param aSQLStatement  The SQL statement to execute
+   *
+   * @returns a new nsIStorageStatement
+   */
+  nsIODBCStorageStatement createStatement(in AString aSQLStatement);
+
+  /**
+   * Execute a SQL expression, expecting no arguments.
+   *
+   * @param aSQLStatement  The SQL statement to execute
+   */
+  void executeSimpleSQL(in AString aSQLStatement);
+
+  long executeSQL(in AString aSQLStatement);
+  /**
+   * Execute an array of queries created with this connection asynchronously
+   * using any currently bound parameters.  The statements are ran wrapped in a
+   * transaction.  These statements can be reused immediately, and reset does
+   * not need to be called.
+   *
+   * Note:  If you have any custom defined functions, they must be re-entrant
+   *        since they can be called on multiple threads.
+   *
+   * @param aStatements
+   *        The array of statements to execute asynchronously, in the order they
+   *        are given in the array.
+   * @param aNumStatements
+   *        The number of statements in aStatements.
+   * @param aCallback [optional]
+   *        The callback object that will be notified of progress, errors, and
+   *        completion.
+   * @returns an object that can be used to cancel the statements execution.
+   */
+  nsIODBCStoragePendingStatement executeAsync(
+    [array, size_is(aNumStatements)] in nsIODBCStorageStatement aStatements,
+    in unsigned long aNumStatements,
+    [optional] in nsIODBCStorageStatementCallback aCallback
+  );
+
+  /**
+   * Check if the given table exists.
+   *
+   * @param aTableName   The table to check
+   * @returns TRUE if table exists, FALSE otherwise.
+   */
+  boolean tableExists(in AString aTableName);
+
+  /**
+   * Check if the given index exists.
+   *
+   * @param aIndexName   The index to check
+   * @returns TRUE if the index exists, FALSE otherwise.
+   */
+//  boolean indexExists(in AUTF8String aIndexName);
+
+
+  /*
+   * Transactions
+   */
+
+  /**
+   * Returns true if a transaction is active on this connection.
+   */
+  readonly attribute boolean transactionInProgress;
+
+  /**
+   * Begin a new transaction.  sqlite default transactions are deferred.
+   * If a transaction is active, throws an error.
+   */
+  void beginTransaction();
+
+  /**
+   * Begins a new transaction with the given type.
+   */
+  const PRInt32 TRANSACTION_READ_UNCOMMITTED = 1;
+  const PRInt32 TRANSACTION_READ_COMMITTED   = 2;
+  const PRInt32 TRANSACTION_REPEATABLE_READ  = 3;
+  const PRInt32 TRANSACTION_SERIALIZABLE     = 4;
+
+  void beginTransactionAs(in PRInt32 transactionType);
+
+  /**
+   * Commits the current transaction.  If no transaction is active,
+   * @throws NS_ERROR_STORAGE_NO_TRANSACTION.
+   */
+  void commitTransaction();
+
+  /**
+   * Rolls back the current transaction.  If no transaction is active,
+   * @throws NS_ERROR_STORAGE_NO_TRANSACTION.
+   */
+  void rollbackTransaction();
+
+  /*
+   * Tables
+   */
+
+  /**
+   * Create the table with the given name and schema.
+   *
+   * If the table already exists, NS_ERROR_FAILURE is thrown.
+   * (XXX at some point in the future it will check if the schema is
+   * the same as what is specified, but that doesn't happen currently.)
+   *
+   * @param aTableName the table name to be created, consisting of
+   * [A-Za-z0-9_], and beginning with a letter.
+   *
+   * @param aTableSchema the schema of the table; what would normally
+   * go between the parens in a CREATE TABLE statement: e.g., "foo
+   * INTEGER, bar STRING".
+   *
+   * @throws NS_ERROR_FAILURE if the table already exists or could not
+   * be created for any other reason.
+   *
+   */
+  void createTable(in string aTableName,
+                   in string aTableSchema);
+
+  nsIODBCStorageStatement getTables(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aTableName,
+  				in nsIVariant aTableType);
+
+  nsIODBCStorageStatement getColumns(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aTableName,
+  				in nsIVariant aColumnName);
+
+
+  nsIODBCStorageStatement getTypeInfo(in short aDataType);
+
+
+  nsIODBCStorageStatement getPrimaryKeys(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aTableName);
+
+  nsIODBCStorageStatement getForeignKeys(in nsIVariant aPkCatalogName, 
+  				in nsIVariant aPkSchemaName,
+  				in nsIVariant aPkTableName,
+                                in nsIVariant aFkCatalogName, 
+  				in nsIVariant aFkSchemaName,
+  				in nsIVariant aFkTableName);
+
+
+  nsIODBCStorageStatement getSpecialColumns(in unsigned short aIdentifierType,
+  				in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aTableName,
+  				in unsigned short aScope,
+  				in unsigned short aNullable);
+
+  nsIODBCStorageStatement getStatistics(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aTableName,
+  				in unsigned short aUnique);
+
+
+  nsIODBCStorageStatement getProcedures(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aProcName);
+
+  nsIODBCStorageStatement getProcedureColumns(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aProcName,
+  				in nsIVariant aColName);
+
+
+  nsIODBCStorageStatement getTablePrivileges(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aTableName);
+
+  nsIODBCStorageStatement getColumnsPrivileges(in nsIVariant aCatalogName, 
+  				in nsIVariant aSchemaName,
+  				in nsIVariant aTableName,
+  				in nsIVariant aColumnName);
+
+
+};

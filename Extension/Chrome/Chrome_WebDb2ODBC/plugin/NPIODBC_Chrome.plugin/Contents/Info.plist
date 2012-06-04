@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>NPIODBC_Chrome</string>
+	<key>CFBundleGetInfoString</key>
+	<string>OpenLink HTML5 WebDb-to-ODBC (Bridge) Plugin ver:1.0.3 for Chrome</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.openlinksw.npiodbc_chrome.plugin</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>NPIODBC_Chrome</string>
+	<key>CFBundlePackageType</key>
+	<string>BRPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.3</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.3</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>WebPluginDescription</key>
+	<string>OpenLink HTML5 WebDb-to-ODBC (Bridge) Plugin ver:1.0.3 for Chrome</string>
+	<key>WebPluginMIMETypes</key>
+	<dict>
+		<key>application/iodbc</key>
+		<dict>
+			<key>WebPluginTypeDescription</key>
+			<string>NPIODBC_Chrome</string>
+		</dict>
+		<key>application/iodbc-chrome</key>
+		<dict>
+			<key>WebPluginTypeDescription</key>
+			<string>NPIODBC_Chrome</string>
+		</dict>
+	</dict>
+	<key>WebPluginName</key>
+	<string>NPIODBC_Chrome</string>
+</dict>
+</plist>

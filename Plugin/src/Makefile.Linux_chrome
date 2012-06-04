@@ -1,0 +1,45 @@
+CXX   = c++
+CPPFLAGS +=     -Os -Wall -Wno-non-virtual-dtor \
+		-fno-rtti -fno-exceptions -fno-strict-aliasing \
+                -freorder-blocks -fno-reorder-functions  \
+		-shared -fPIC -pthread 
+ 
+# Change this to point at your Gecko SDK directory.     h
+GECKO_SDK_PATH = ./sdk
+ 
+# GCC only define which allows us to not have to #include mozilla-config 
+# in every .cpp file.  If your not using GCC remove this line and add 
+# #include "mozilla-config.h" to each of your .cpp files. 
+GECKO_CONFIG_INCLUDE = 
+#-include xpcom-config.h 
+ 
+GECKO_DEFINES  = -DCHROME -DXP_UNIX -DNDEBUG -DTRIMMED -DWITH_PTHREADS -D_REENTRANT
+ 
+GECKO_INCLUDES = -I $(GECKO_SDK_PATH)/ -I .
+ 
+GECKO_LDFLAGS =	-lpthread -ldl -lm \
+        -L /usr/local/lib -liodbc \
+        -Wl,-z,defs -Wl,-h,libnpiodbc_chrome.so
+
+
+FILES = Connection.cpp \
+	Database.cpp \
+	np_entry.cpp \
+	npn_gate.cpp \
+	npp_gate.cpp \
+	plugin.cpp \
+	Statement.cpp \
+	utils.cpp
+
+
+TARGET = ./out/libnpiodbc_chrome.so
+
+
+
+build:  
+	$(CXX) -o $(TARGET) $(GECKO_CONFIG_INCLUDE) $(GECKO_DEFINES) $(GECKO_INCLUDES) $(CPPFLAGS) $(CXXFLAGS) $(FILES) $(GECKO_LDFLAGS) 
+	chmod +x $(TARGET)
+	strip $(TARGET)
+
+clean: 
+	rm $(TARGET)

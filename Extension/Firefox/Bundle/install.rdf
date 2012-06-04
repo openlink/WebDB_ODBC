@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+
+    <em:id>iodbcstorage@openlinksw.com</em:id>
+    <em:name>HTML5 WebDb-to-ODBC Bridge</em:name>
+    <em:version>0.2.4</em:version>
+    <em:creator>OpenLink Software</em:creator>
+    <em:unpack>true</em:unpack>
+
+<!--    <em:contributor>myconribytor</em:contributor> -->
+
+    <em:description>Enables ODBC use by/through Mozilla Storage and HTML5 WebDB Database interfaces.</em:description>
+                    
+    <em:homepageURL>http://uda.openlinksw.com</em:homepageURL>
+
+<!--    <em:updateURL>http://myupdate</em:updateURL> -->
+
+    <em:iconURL>chrome://iodbcstorage/content/iodbc.png</em:iconURL>
+
+    
+<!-- TARGETMARKER -->
+    <!-- Firefox --> 
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>3.0</em:minVersion>
+        <em:maxVersion>8.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+
+    <em:targetApplication>
+      <Description>
+        <em:id>toolkit@mozilla.org</em:id>
+        <em:minVersion>1.9.0</em:minVersion>
+        <em:maxVersion>*</em:maxVersion>
+      </Description>
+
+    </em:targetApplication>
+
+  </Description>
+</RDF>

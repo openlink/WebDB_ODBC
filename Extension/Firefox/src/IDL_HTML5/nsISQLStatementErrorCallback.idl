@@ -1,0 +1,12 @@
+#include "nsISupports.idl"
+
+interface nsISQLError;
+interface nsISQLTransaction;
+
+
+[scriptable, uuid(9bc9d5a6-2e6b-4b3b-a7f8-5771b4a7c877)]
+interface nsISQLStatementErrorCallback: nsISupports {
+
+  boolean handleEvent(in nsISQLTransaction transaction, in nsISQLError error);
+
+};

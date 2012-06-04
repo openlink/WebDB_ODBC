@@ -1,0 +1,98 @@
+CXX   = c++
+CPPFLAGS +=     -Os -Wall -Wno-non-virtual-dtor \
+		-fno-rtti -fno-exceptions -fno-strict-aliasing \
+                -freorder-blocks -fno-reorder-functions  \
+		-fPIC -pthread \
+                -fpascal-strings -fno-common \
+	        -Wno-long-long \
+		-Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy \
+                -Wcast-align -Wno-invalid-offsetof -Wpointer-arith \
+                -isysroot /Developer/SDKs/MacOSX10.5.sdk
+
+ 
+# Change this to point at your Gecko SDK directory.     h
+GECKO_SDK_PATH = /Users/sergei/ppc/xulrunner-sdk
+ 
+# GCC only define which allows us to not have to #include mozilla-config 
+# in every .cpp file.  If your not using GCC remove this line and add 
+# #include "mozilla-config.h" to each of your .cpp files. 
+GECKO_CONFIG_INCLUDE = -include xpcom-config.h 
+ 
+GECKO_DEFINES  = -DXP_UNIX -DXP_MACOSX -DNDEBUG -DTRIMMED
+ 
+GECKO_INCLUDES = -I/Developer/SDKs/MacOSX10.5.sdk/Developer/Headers/FlatCarbon  -I $(GECKO_SDK_PATH)/sdk/include -I $(GECKO_SDK_PATH)/include/xpcom -I $(GECKO_SDK_PATH)/include/xpconnect -I $(GECKO_SDK_PATH)/include/string  -I ./inc -I .
+ 
+GECKO_LDFLAGS =	-framework Cocoa \
+         $(GECKO_SDK_PATH)/lib/libxpcomglue_s.a \
+	-L$(GECKO_SDK_PATH)/lib -lxpcom -lplds4 -lplc4 -lnspr4 \
+        -framework Carbon -framework CoreFoundation -framework CoreServices \
+	-framework iODBC -framework iODBCinst  -arch ppc \
+	-Wl,-dead_strip \
+	-Wl,-exported_symbols_list -Wl,./Macosx-components-export-list \
+	-bundle    
+
+
+
+
+INCLUDE = nsIODBCStorageConnection.h nsIODBCStorageError.h \
+    nsIODBCStoragePendingStatement.h nsIODBCStorageResultSet.h \
+    nsIODBCStorageRow.h nsIODBCStorageService.h \
+    nsIODBCStorageStatement.h nsIODBCStorageStatementCallback.h \
+    nsIODBCStorageValueArray.h
+
+XPT = nsIODBCStorageConnection.xpt nsIODBCStorageError.xpt \
+    nsIODBCStoragePendingStatement.xpt nsIODBCStorageResultSet.xpt \
+    nsIODBCStorageRow.xpt nsIODBCStorageService.xpt \
+    nsIODBCStorageStatement.xpt nsIODBCStorageStatementCallback.xpt \
+    nsIODBCStorageValueArray.xpt \
+    nsISQLVoidCallback.xpt nsISQLTransactionCallback.xpt \
+    nsISQLResultSetRowList.xpt nsISQLError.xpt \
+    nsISQLStatementCallback.xpt nsISQLResultSetMetaData.xpt \
+    nsISQLStatementErrorCallback.xpt nsIDatabaseCallback.xpt \
+    nsISQLTransactionErrorCallback.xpt nsISQLTransaction.xpt \
+    nsISQLException.xpt nsIWorkerUtilsDatabase.xpt \
+    nsISQLTransactionSync.xpt nsISQLTransactionSyncCallback.xpt \
+    nsIDatabase.xpt nsISQLResultSet.xpt nsIDatabaseSync.xpt \
+    nsISQLParameterArray.xpt
+
+CINCLUDE := \
+    $(INCLUDE:%.h=inc/%.h)
+
+CXPT := \
+    $(XPT:%.xpt=out/%.xpt)
+
+
+FILES = nsODBCUtils.cpp \
+	nsODBCStorageEvents.cpp \
+	nsODBCmodule.cpp \
+	nsODBCStorageService.cpp \
+	nsODBCStorageConnection.cpp \
+	nsODBCParam.cpp \
+	nsODBCStorageStatement.cpp \
+	nsODBCStorageError.cpp \
+	nsODBCStorageResultSet.cpp \
+	nsODBCStorageVariant.cpp \
+	nsODBCStorageRow.cpp
+
+
+TARGET = ./out/openlink_odbc.dylib
+
+
+inc/%.h: IDL_MOZ/%.idl
+	$(GECKO_SDK_PATH)/bin/xpidl -m header -e $@ -I$(GECKO_SDK_PATH)/idl -I./IDL_MOZ $?
+
+out/%.xpt: IDL_HTML5/%.idl
+	$(GECKO_SDK_PATH)/bin/xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)/idl -I./IDL_HTML5 $?
+
+out/%.xpt: IDL_MOZ/%.idl
+	$(GECKO_SDK_PATH)/bin/xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)/idl -I./IDL_MOZ $?
+
+
+
+
+build:  $(CINCLUDE) $(CXPT)
+	$(CXX) -o $(TARGET) $(GECKO_CONFIG_INCLUDE) $(GECKO_DEFINES) $(GECKO_INCLUDES) $(CPPFLAGS) $(CXXFLAGS) $(FILES) $(GECKO_LDFLAGS) 
+	chmod +x $(TARGET)
+
+clean: 
+	rm $(TARGET)

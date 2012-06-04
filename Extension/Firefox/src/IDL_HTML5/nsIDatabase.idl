@@ -1,0 +1,25 @@
+#include "nsISupports.idl"
+
+interface nsISQLTransactionCallback;
+interface nsISQLTransactionErrorCallback;
+interface nsISQLVoidCallback;
+
+[scriptable, uuid(2e75b1d2-ab37-4676-8ac6-6ec12e3bdc69)]
+interface nsIDatabase : nsISupports {
+
+  void transaction(in nsISQLTransactionCallback callback, 
+  	[optional] in nsISQLTransactionErrorCallback errorCallback,
+  	[optional] in nsISQLVoidCallback successCallback
+  	);
+
+  void readTransaction(in nsISQLTransactionCallback callback,
+  	[optional] in nsISQLTransactionErrorCallback errorCallback,
+  	[optional] in nsISQLVoidCallback successCallback);
+
+  readonly attribute DOMString version;
+
+  void changeVersion(in DOMString oldVersion, in DOMString newVersion, 
+  	[optional] in nsISQLTransactionCallback callback,
+  	[optional] in nsISQLTransactionErrorCallback errorCallback,
+  	[optional] in nsISQLVoidCallback successCallback);
+};

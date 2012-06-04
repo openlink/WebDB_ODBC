@@ -1,0 +1,20 @@
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+#include "nsISupports.idl"
+
+[scriptable, uuid(19e51627-79a8-46f5-9b6a-111905ad1830)]
+interface nsIODBCStoragePendingStatement : nsISupports {
+
+  /**
+   * Cancels a pending statement, if possible.  This will only fail if you try
+   * cancel more than once.
+   *
+   * @note For read statements (such as SELECT), you will no longer receive any
+   *       notifications about results once cancel is called.
+   *
+   * @returns true if canceled successfully, false otherwise.
+   */
+   boolean cancel();
+};

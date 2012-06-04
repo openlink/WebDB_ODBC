@@ -1,0 +1,102 @@
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* ***** BEGIN LICENSE BLOCK *****
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+#include "nsISupports.idl"
+#include "nsIVariant.idl"
+
+[ptr] native octetPtr(PRUint8);
+
+/**
+ * nsIODBCStorageValueArray wraps an array of SQL values,
+ * such as a single database row.
+ */
+[scriptable, uuid(b60cc3a8-c04b-422b-b703-fce3a0583b57)]
+interface nsIODBCStorageValueArray : nsISupports {
+  /**
+   * These type values are returned by getTypeOfIndex
+   * to indicate what type of value is present at
+   * a given column.
+   */
+  const long VALUE_TYPE_UNKNOWN = 0;
+  const long VALUE_TYPE_CHAR   = 1;
+  const long VALUE_TYPE_NUMERIC = 2;
+  const long VALUE_TYPE_DECIMAL = 3;
+  const long VALUE_TYPE_INTEGER = 4;
+  const long VALUE_TYPE_SMALLINT = 5;
+  const long VALUE_TYPE_FLOAT = 6;
+  const long VALUE_TYPE_REAL = 7;
+  const long VALUE_TYPE_DOUBLE = 8;
+  const long VALUE_TYPE_DATE = 9;
+  const long VALUE_TYPE_TIME = 10;
+  const long VALUE_TYPE_TIMESTAMP = 11;
+  const long VALUE_TYPE_VARCHAR = 12;
+  const long VALUE_TYPE_LONGVARCHAR = -1;
+  const long VALUE_TYPE_BINARY = -2;
+  const long VALUE_TYPE_VARBINARY = -3;
+  const long VALUE_TYPE_LONGVARBINARY = -4;
+  const long VALUE_TYPE_BIGINT = -5;
+  const long VALUE_TYPE_TINYINT = -6;
+  const long VALUE_TYPE_BIT = -7;
+  const long VALUE_TYPE_WCHAR = -8;
+  const long VALUE_TYPE_WVARCHAR = -9;
+  const long VALUE_TYPE_WLONGVARCHAR = -10;
+  const long VALUE_TYPE_GUID = -11;
+
+  /**
+   * numEntries
+   *
+   * number of entries in the array (each corresponding to a column
+   * in the database row)
+   */
+  readonly attribute unsigned short numEntries;
+
+  /**
+   * Returns the type of the value at the given column index;
+   * one of VALUE_TYPE_NULL, VALUE_TYPE_INTEGER, VALUE_TYPE_FLOAT,
+   * VALUE_TYPE_TEXT, VALUE_TYPE_BLOB.
+   */
+  long getTypeOfIndex(in unsigned short aIndex);
+
+  boolean isNullable(in unsigned short aIndex);
+  /**
+   * Obtain a value for the given entry (column) index.
+   * Due to SQLite's type conversion rules, any of these are valid
+   * for any column regardless of the column's data type.  However,
+   * if the specific type matters, getTypeOfIndex should be used
+   * first to identify the column type, and then the appropriate
+   * get method should be called.
+   *
+   * If you ask for a string value for a NULL column, you will get an empty
+   * string with IsVoid set to distinguish it from an explicitly set empty
+   * string.
+   */
+  boolean getBool(in unsigned short aIndex);
+
+  short getInt16(in unsigned short aIndex);
+
+  long getInt32(in unsigned short aIndex);
+
+  long long getInt64(in unsigned short aIndex);
+
+  float getFloat(in unsigned short aIndex);
+
+  double getDouble(in unsigned short aIndex);
+
+  AString getString(in unsigned short aIndex);
+
+  AUTF8String getUTF8String(in unsigned short aIndex);
+
+  nsIVariant getVariant(in unsigned short aIndex);
+
+  nsIVariant data(in AString aName);
+
+  // data will be NULL if dataSize = 0
+  void getBlob(in unsigned short aIndex, out unsigned long aDataSize, [array,size_is(aDataSize)] out octet aData);
+
+  boolean getIsNull(in unsigned short aIndex);
+
+
+
+};

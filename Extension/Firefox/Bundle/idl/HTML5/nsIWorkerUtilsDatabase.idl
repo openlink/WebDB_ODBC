@@ -1,0 +1,22 @@
+#include "nsISupports.idl"
+
+interface nsIDatabase;
+interface nsIDatabaseSync;
+interface nsIDatabaseCallback;
+interface nsIVariant;
+
+
+[scriptable, uuid(bb37265d-1f37-4033-a9ca-3b7af3a1248e)]
+interface nsIWorkerUtilsDatabase : nsISupports {
+  nsIDatabase openDatabase(in DOMString name, in DOMString version, 
+  	in DOMString displayName, 
+  	in unsigned long estimatedSize, 
+  	[optional] in nsIDatabaseCallback creationCallback);
+
+  nsIDatabaseSync openDatabaseSync(in DOMString name, in DOMString version, 
+  	in DOMString displayName, 
+  	in unsigned long estimatedSize, 
+  	[optional] in nsIDatabaseCallback creationCallback);
+
+  nsIVariant getDataSources();
+};

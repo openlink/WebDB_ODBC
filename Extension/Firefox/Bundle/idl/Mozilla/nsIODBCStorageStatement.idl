@@ -1,0 +1,191 @@
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+ * vim: sw=2 ts=2 sts=2 expandtab
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+#include "nsISupports.idl"
+#include "nsIODBCStorageValueArray.idl"
+
+interface nsIODBCStorageConnection;
+interface nsISimpleEnumerator;
+interface nsIODBCStorageStatementCallback;
+interface nsIODBCStoragePendingStatement;
+interface nsIVariant;
+
+
+%{C++
+
+#include "nsODBCParam.h"
+
+%}
+
+native ConnHandle(SQLHANDLE);
+[ref] native ODBCParam(nsCOMArray<nsODBCParam>);
+
+
+[scriptable, uuid(f3da6881-30a7-4ef0-a554-3a178b14017a)]
+interface nsIODBCStorageStatement : nsIODBCStorageValueArray {
+  /**
+   * Finalizes a statement so you can successfully close a database connection.
+   * This method does not need to be used from native callers since you can just
+   * set the statement to null, but is extremely useful to JS callers.
+   */
+  void finalize();
+
+  /**
+   * Create a clone of this statement, by initializing a new statement
+   * with the same connection and same SQL statement as this one.  It
+   * does not preserve statement state; that is, if a statement is
+   * being executed when it is cloned, the new statement will not be
+   * executing.
+   */
+  nsIODBCStorageStatement clone();
+
+  [noscript,notxpcom]  nsIODBCStorageStatement dupForAsync();
+
+  /**
+   * The last ODBC error code.
+   */
+  readonly attribute long lastErrorCode;
+
+  /**
+   * The last ODBC error as a string 
+   */
+  readonly attribute AString lastErrorString;
+
+  /**
+   * The last ODBC error as a string 
+   */
+  readonly attribute AString lastErrorState;
+
+  /*
+   * Number of parameters
+   */
+  readonly attribute unsigned short parameterCount;
+
+  /**
+   * Number of columns returned
+   */
+  readonly attribute unsigned short columnCount;
+
+  /**
+   * Name of nth column
+   */
+  AString getColumnName(in unsigned short aColumnIndex);
+
+  /**
+   * Obtains the index of the column with the specified name.
+   *
+   * @param aName The name of the column.
+   * @return The index of the column with the specified name.
+   */
+  unsigned short getColumnIndex(in AString aName);
+
+  /**
+   * Obtains the declared column type of a prepared statement.
+   *
+   * @param aColumnIndex The zero-based index of the column who's declared type
+   *                    we are interested in.
+   * @returns the declared index type.
+   */
+  AString getColumnDecltype(in unsigned short aColumnIndex);
+
+  /**
+   * Reset parameters/statement execution
+   */
+  void reset();
+
+  [noscript]  void setParams(in ODBCParam params);
+
+  /**
+   * Bind the given value to the parameter at aParamIndex. Index 0
+   * denotes the first numbered argument or ?1.
+   */
+  void bindParameter(in unsigned short aParamIndex, in nsIVariant aValue);
+
+  void bindStringParameter(in unsigned short aParamIndex, in AString aValue);
+  void bindLongStringParameter(in unsigned short aParamIndex, in AString aValue);
+  void bindFloatParameter(in unsigned short aParamIndex, in float aValue);
+  void bindDoubleParameter(in unsigned short aParamIndex, in double aValue);
+  void bindInt16Parameter(in unsigned short aParamIndex, in short aValue);
+  void bindInt32Parameter(in unsigned short aParamIndex, in long aValue);
+  void bindInt64Parameter(in unsigned short aParamIndex, in long long aValue);
+  void bindNullParameter(in unsigned short aParamIndex);
+  void bindBlobParameter(in unsigned short aParamIndex,
+                         [array,const,size_is(aValueSize)] in octet aValue,
+                         in unsigned long aValueSize);
+  void bindBinaryParameter(in unsigned short aParamIndex,
+                         [array,const,size_is(aValueSize)] in octet aValue,
+                         in unsigned long aValueSize);
+
+  void executeSql();
+  boolean moreResults();
+  boolean fetch();
+
+  readonly attribute long rowCount;
+  
+  /**
+   * Execute the query, ignoring any results.  This is accomplished by
+   * calling step() once, and then calling reset().
+   *
+   * Error and last insert info, etc. are available from
+   * the nsODBCStorageConnection.
+   */
+  void execute();
+
+  /**
+   * Execute a query, using any currently-bound parameters.  Reset
+   * must be called on the statement after the last call of
+   * executeStep.
+   *
+   * @returns a boolean indicating whether there are more rows or not;
+   * row data may be accessed using nsODBCIStorageValueArray methods on
+   * the statement.
+   *
+   */
+  boolean executeStep();
+
+
+  /**
+   * Execute a query asynchronously using any currently bound parameters.  This
+   * statement can be reused immediately, and reset does not need to be called.
+   *
+   * Note:  If you have any custom defined functions, they must be re-entrant
+   *        since they can be called on multiple threads.
+   *
+   * @param aCallback [optional]
+   *        The callback object that will be notified of progress, errors, and
+   *        completion.
+   * @returns an object that can be used to cancel the statements execution.
+   */
+
+  nsIODBCStoragePendingStatement executeAsync(
+    [optional] in nsIODBCStorageStatementCallback aCallback
+  );
+
+  /**
+   * The current state.  Row getters are only valid while
+   * the statement is in the "executing" state.
+   */
+  const long NS_ODBC_STORAGE_STATEMENT_INVALID = 0;
+  const long NS_ODBC_STORAGE_STATEMENT_READY = 1;
+  const long NS_ODBC_STORAGE_STATEMENT_EXECUTING = 2;
+
+  readonly attribute long state;
+
+  [noscript,notxpcom] readonly attribute ConnHandle connectionHandle;
+
+  /**
+   * Escape a string for SQL LIKE search.
+   *
+   * @param     aValue the string to escape for SQL LIKE 
+   * @param     aEscapeChar the escape character
+   * @returns   an AString of an escaped version of aValue
+   *            (%, _ and the escape char are escaped with the escape char)
+   *            For example, we will convert "foo/bar_baz%20cheese" 
+   *            into "foo//bar/_baz/%20cheese" (if the escape char is '/').
+   * @note      consumers will have to use same escape char
+   *            when doing statements such as:   ...LIKE '?1' ESCAPE '/'...
+   */
+  AString escapeStringForLIKE(in AString aValue, in wchar aEscapeChar);
+};

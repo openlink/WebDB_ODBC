@@ -1,0 +1,223 @@
+# Change this to point at your Gecko SDK directory.
+
+GECKO_SDK_PATH = e:\Mozilla\8xulrunner-sdk
+ 
+GECKO_DEFINES  = -DXP_WIN -DXP_WIN32 /FI mozilla-config.h -DWITH_PTHREADS -D_REENTRANT
+ 
+GECKO_INCLUDES = -I $(GECKO_SDK_PATH)/include  -I ./inc -I .
+ 
+GECKO_LIBS = xpcomglue_s.lib xpcom.lib nspr4.lib mozalloc.lib
+
+
+CINCLUDE = .\inc\nsIODBCStorageConnection.h \
+	.\inc\nsIODBCStorageError.h \
+        .\inc\nsIODBCStoragePendingStatement.h \
+        .\inc\nsIODBCStorageResultSet.h \
+        .\inc\nsIODBCStorageRow.h \
+        .\inc\nsIODBCStorageService.h \
+        .\inc\nsIODBCStorageStatement.h \
+        .\inc\nsIODBCStorageStatementCallback.h \
+        .\inc\nsIODBCStorageValueArray.h
+
+XPT = .\out\nsIODBCStorageConnection.xpt \
+      .\out\nsIODBCStorageError.xpt \
+      .\out\nsIODBCStoragePendingStatement.xpt \
+      .\out\nsIODBCStorageResultSet.xpt \
+      .\out\nsIODBCStorageRow.xpt \
+      .\out\nsIODBCStorageService.xpt \
+      .\out\nsIODBCStorageStatement.xpt \
+      .\out\nsIODBCStorageStatementCallback.xpt \
+      .\out\nsIODBCStorageValueArray.xpt \
+      .\out\nsISQLVoidCallback.xpt \
+      .\out\nsISQLTransactionCallback.xpt \
+      .\out\nsISQLResultSetRowList.xpt \
+      .\out\nsISQLError.xpt \
+      .\out\nsISQLStatementCallback.xpt \
+      .\out\nsISQLResultSetMetaData.xpt \
+      .\out\nsISQLStatementErrorCallback.xpt \
+      .\out\nsIDatabaseCallback.xpt \
+      .\out\nsISQLTransactionErrorCallback.xpt \
+      .\out\nsISQLTransaction.xpt \
+      .\out\nsISQLException.xpt \
+      .\out\nsIWorkerUtilsDatabase.xpt \
+      .\out\nsISQLTransactionSync.xpt \
+      .\out\nsISQLTransactionSyncCallback.xpt \
+      .\out\nsIDatabase.xpt \
+      .\out\nsISQLResultSet.xpt \
+      .\out\nsIDatabaseSync.xpt \
+      .\out\nsISQLParameterArray.xpt
+
+
+FILES = .\out\nsODBCUtils.obj \
+	.\out\nsODBCStorageEvents.obj \
+	.\out\nsODBCmodule.obj \
+	.\out\nsODBCStorageService.obj \
+	.\out\nsODBCStorageConnection.obj \
+	.\out\nsODBCParam.obj \
+	.\out\nsODBCStorageStatement.obj \
+	.\out\nsODBCStorageError.obj \
+	.\out\nsODBCStorageResultSet.obj \
+	.\out\nsODBCStorageVariant.obj \
+	.\out\nsODBCStorageRow.obj
+
+
+
+.\inc\nsIODBCStorageConnection.h: .\IDL_MOZ\nsIODBCStorageConnection.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStorageError.h: .\IDL_MOZ\nsIODBCStorageError.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStoragePendingStatement.h: .\IDL_MOZ\nsIODBCStoragePendingStatement.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStorageResultSet.h: .\IDL_MOZ\nsIODBCStorageResultSet.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStorageRow.h: .\IDL_MOZ\nsIODBCStorageRow.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStorageService.h: .\IDL_MOZ\nsIODBCStorageService.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStorageStatement.h: .\IDL_MOZ\nsIODBCStorageStatement.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStorageStatementCallback.h: .\IDL_MOZ\nsIODBCStorageStatementCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\inc\nsIODBCStorageValueArray.h: .\IDL_MOZ\nsIODBCStorageValueArray.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m header -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+
+
+
+.\out\nsIODBCStorageConnection.xpt: .\IDL_MOZ\nsIODBCStorageConnection.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStorageError.xpt: .\IDL_MOZ\nsIODBCStorageError.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStoragePendingStatement.xpt: .\IDL_MOZ\nsIODBCStoragePendingStatement.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStorageResultSet.xpt: .\IDL_MOZ\nsIODBCStorageResultSet.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStorageRow.xpt: .\IDL_MOZ\nsIODBCStorageRow.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStorageService.xpt: .\IDL_MOZ\nsIODBCStorageService.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStorageStatement.xpt: .\IDL_MOZ\nsIODBCStorageStatement.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStorageStatementCallback.xpt: .\IDL_MOZ\nsIODBCStorageStatementCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsIODBCStorageValueArray.xpt: .\IDL_MOZ\nsIODBCStorageValueArray.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_MOZ $?
+
+.\out\nsISQLVoidCallback.xpt: .\IDL_HTML5\nsISQLVoidCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLTransactionCallback.xpt: .\IDL_HTML5\nsISQLTransactionCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLResultSetRowList.xpt: .\IDL_HTML5\nsISQLResultSetRowList.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLError.xpt: .\IDL_HTML5\nsISQLError.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLStatementCallback.xpt: .\IDL_HTML5\nsISQLStatementCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLResultSetMetaData.xpt: .\IDL_HTML5\nsISQLResultSetMetaData.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLStatementErrorCallback.xpt: .\IDL_HTML5\nsISQLStatementErrorCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsIDatabaseCallback.xpt: .\IDL_HTML5\nsIDatabaseCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLTransactionErrorCallback.xpt: .\IDL_HTML5\nsISQLTransactionErrorCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLTransaction.xpt: .\IDL_HTML5\nsISQLTransaction.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLException.xpt: .\IDL_HTML5\nsISQLException.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsIWorkerUtilsDatabase.xpt: .\IDL_HTML5\nsIWorkerUtilsDatabase.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLTransactionSync.xpt: .\IDL_HTML5\nsISQLTransactionSync.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLTransactionSyncCallback.xpt: .\IDL_HTML5\nsISQLTransactionSyncCallback.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsIDatabase.xpt: .\IDL_HTML5\nsIDatabase.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLResultSet.xpt: .\IDL_HTML5\nsISQLResultSet.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsIDatabaseSync.xpt: .\IDL_HTML5\nsIDatabaseSync.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+.\out\nsISQLParameterArray.xpt: .\IDL_HTML5\nsISQLParameterArray.idl
+	$(GECKO_SDK_PATH)\bin\xpidl -m typelib -e $@ -I$(GECKO_SDK_PATH)\idl -I.\IDL_HTML5 $?
+
+
+
+
+
+.cpp{.\out\}.obj:
+	$(CC) $(CFLAGS) $(GECKO_CONFIG_INCLUDE) $(GECKO_DEFINES) $(GECKO_INCLUDES) -Fd.\out\ -Fo.\out\ -c $<
+
+
+
+## Release version
+CCDEFS	= -D_WINDOWS -DWIN32 -D_Windows -DNDEBUG -D_WINDLL -D_UNICODE -DUNICODE
+CCOPT	= -O2 /GL /FD /EHsc /Zi
+
+EXEFLAGS	= /SUBSYSTEM:console /STACK:8192 /DEBUG:none
+WINFLAGS	= /SUBSYSTEM:windows /STACK:8192 /DEBUG:none
+
+
+CCXTRA	= -nologo -MT -W3 
+CFLAGS	= $(CCXTRA) $(CCOPT) $(CCDEFS) $(CCINCL)
+LDSYSLIBS	= kernel32.lib user32.lib gdi32.lib advapi32.lib odbc32.lib odbccp32.lib
+LDOPTS	= -nologo 
+LD32		= link
+LD32FLAGS	= $(LDOPTS) $(LDLIBS) $(LDSYSLIBS)
+
+
+
+
+
+all : $(CINCLUDE) $(XPT) $(FILES)
+	@echo   ===== Build DLL =====
+	$(LD32) @<<
+	$(LD32FLAGS)
+	-out:.\out\openlink_odbc.dll
+	/LIBPATH:$(GECKO_SDK_PATH)\lib 
+	$(WINFLAGS) $(GECKO_LIBS)
+	-dll
+	$(FILES)
+<<
+	del /q .\out\*.obj
+	del /q .\out\*.exp
+	del /q .\out\*.lib
+	del /q .\out\*.idb
+	del /q .\out\*.pdb
+
+
+clean :
+	-255 del /q .\out\*.*
+	-255 del /q .\inc\*.*

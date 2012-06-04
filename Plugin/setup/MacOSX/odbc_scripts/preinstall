@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+
+
+prog0=/Library/Internet\ Plug-Ins/NPIODBCPlugin.webplugin/
+if test -d "$prog0"
+then 
+    /bin/rm -fdR "$prog0"
+fi
+
+prog=$HOME/Library/Internet\ Plug-Ins/NPIODBCPlugin.webplugin/ 
+if test -d "$prog1"
+then 
+    /bin/rm -fdR "$prog1"
+fi
+
+exit 0

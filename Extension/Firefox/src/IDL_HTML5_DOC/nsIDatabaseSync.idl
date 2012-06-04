@@ -1,0 +1,16 @@
+#include "nsISupports.idl"
+
+interface nsISQLTransactionSyncCallback;
+
+[scriptable, uuid(0695484c-dd91-4964-94f3-7080917dbd23)]
+interface nsIDatabaseSync : nsISupports {
+
+  void transaction(in nsISQLTransactionSyncCallback callback);
+
+  void readTransaction(in nsISQLTransactionSyncCallback callback);
+
+  readonly attribute DOMString version;
+
+  void changeVersion(in DOMString oldVersion, in DOMString newVersion, 
+  	[optional] in nsISQLTransactionSyncCallback callback);
+};

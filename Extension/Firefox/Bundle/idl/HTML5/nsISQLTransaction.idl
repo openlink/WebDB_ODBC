@@ -1,0 +1,64 @@
+#include "nsISupports.idl"
+
+interface nsISQLParameterArray;
+interface nsISQLStatementCallback;
+interface nsISQLStatementErrorCallback;
+interface nsIVariant;
+
+[scriptable, uuid(9f353735-17a4-4cf7-ac3f-2975e0534b0e)]
+interface nsISQLTransaction : nsISupports {
+
+  nsISQLParameterArray createParameterArray();
+
+  void executeSql(in DOMString sqlStatement, 
+  	[optional] in nsIVariant arguments, 
+  	[optional] in nsISQLStatementCallback callback,
+  	[optional] in nsISQLStatementErrorCallback errorCallback);
+
+  void executeSql2(in DOMString sqlStatement, 
+  	[optional] in nsISQLParameterArray arguments, 
+  	[optional] in nsISQLStatementCallback callback,
+  	[optional] in nsISQLStatementErrorCallback errorCallback);
+
+
+  void getCatalogs(
+  	[optional] in nsISQLStatementCallback callback,
+  	[optional] in nsISQLStatementErrorCallback errorCallback);
+
+  void getTables(in DOMString catalog, in DOMString schema, 
+  		in DOMString table, in DOMString tableType,
+  	        [optional] in nsISQLStatementCallback callback,
+  	        [optional] in nsISQLStatementErrorCallback errorCallback);
+
+  void getColumns(in DOMString catalog, in DOMString schema, 
+  		in DOMString table, in DOMString column,
+  	        [optional] in nsISQLStatementCallback callback,
+  	        [optional] in nsISQLStatementErrorCallback errorCallback);
+  
+  void getPrimaryKeys(in DOMString catalog, in DOMString schema, 
+  		in DOMString table,
+  	        [optional] in nsISQLStatementCallback callback,
+  	        [optional] in nsISQLStatementErrorCallback errorCallback);
+
+  void getForeignKeys(in DOMString pcatalog, in DOMString pschema, 
+  		in DOMString ptable, in DOMString fcatalog, in DOMString fschema, 
+  		in DOMString ftable,
+  	        [optional] in nsISQLStatementCallback callback,
+  	        [optional] in nsISQLStatementErrorCallback errorCallback);
+
+  void getTypeInfo(in short dataType,
+  	        [optional] in nsISQLStatementCallback callback,
+  	        [optional] in nsISQLStatementErrorCallback errorCallback);
+
+
+  void getProcedures(in DOMString catalog, in DOMString schema, 
+  		in DOMString procedure,
+  	        [optional] in nsISQLStatementCallback callback,
+  	        [optional] in nsISQLStatementErrorCallback errorCallback);
+
+  void getProcedureColumns(in DOMString catalog, in DOMString schema, 
+  		in DOMString procedure, in DOMString column,
+  	        [optional] in nsISQLStatementCallback callback,
+  	        [optional] in nsISQLStatementErrorCallback errorCallback);
+
+};

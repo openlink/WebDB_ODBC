@@ -1,0 +1,41 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(3ac79c70-6e43-49e5-8cb0-de17a77c5cb0)]
+interface nsISQLResultSetMetaData : nsISupports {
+
+  const long TYPE_UNKNOWN = 0;
+  const long TYPE_CHAR   = 1;
+  const long TYPE_NUMERIC = 2;
+  const long TYPE_DECIMAL = 3;
+  const long TYPE_INTEGER = 4;
+  const long TYPE_SMALLINT = 5;
+  const long TYPE_FLOAT = 6;
+  const long TYPE_REAL = 7;
+  const long TYPE_DOUBLE = 8;
+  const long TYPE_DATE = 9;
+  const long TYPE_TIME = 10;
+  const long TYPE_TIMESTAMP = 11;
+  const long TYPE_VARCHAR = 12;
+  const long TYPE_LONGVARCHAR = -1;
+  const long TYPE_BINARY = -2;
+  const long TYPE_VARBINARY = -3;
+  const long TYPE_LONGVARBINARY = -4;
+  const long TYPE_BIGINT = -5;
+  const long TYPE_TINYINT = -6;
+  const long TYPE_BIT = -7;
+  const long TYPE_WCHAR = -8;
+  const long TYPE_WVARCHAR = -9;
+  const long TYPE_WLONGVARCHAR = -10;
+  const long TYPE_GUID = -11;
+
+  
+  readonly attribute unsigned short columnCount;
+
+  long getColumnType(in unsigned short aIndex);
+
+  boolean isNullable(in unsigned short aIndex);
+  
+  AString getColumnName(in unsigned short aIndex);
+
+};

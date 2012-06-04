@@ -1,0 +1,13 @@
+#include "nsISupports.idl"
+
+interface nsIVariant;
+
+
+[scriptable, uuid(dea73dac-541b-4db5-9360-6d99b20f05e4)]
+interface nsISQLResultSetRowList : nsISupports {
+
+  readonly attribute unsigned long length;
+
+  nsIVariant item(in unsigned long index);
+
+};

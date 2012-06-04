@@ -1,0 +1,35 @@
+#include "nsISupports.idl"
+
+interface nsISQLResultSet;
+interface nsIVariant;
+
+[scriptable, uuid(45f812b3-7a61-49ff-8714-3d3dd7dcb620)]
+interface nsISQLTransactionSync : nsISupports {
+
+  nsISQLResultSet executeSql(in DOMString sqlStatement, 
+  	[optional] in nsIVariant arguments);
+
+  nsISQLResultSet getCatalogs();
+
+  nsISQLResultSet getTables(in DOMString catalog, in DOMString schema, 
+  		in DOMString table, in DOMString tableType);
+
+  nsISQLResultSet getColumns(in DOMString catalog, in DOMString schema, 
+  		in DOMString table, in DOMString column);
+  
+  nsISQLResultSet getPrimaryKeys(in DOMString catalog, in DOMString schema, 
+  		in DOMString table);
+
+  nsISQLResultSet getForeignKeys(in DOMString pcatalog, in DOMString pschema, 
+  		in DOMString ptable, in DOMString fcatalog, in DOMString fschema, 
+  		in DOMString ftable);
+
+  nsISQLResultSet getTypeInfo(in short dataType);
+
+  nsISQLResultSet getProcedures(in DOMString catalog, in DOMString schema, 
+  		in DOMString procedure);
+
+  nsISQLResultSet getProcedureColumns(in DOMString catalog, in DOMString schema, 
+  		in DOMString procedure, in DOMString column);
+
+};

@@ -1,0 +1,19 @@
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+#include "nsISupports.idl"
+interface nsIODBCStorageRow;
+
+[scriptable, uuid(8c0682f4-3071-48a9-af07-a573de0137f7)]
+interface nsIODBCStorageResultSet : nsISupports {
+
+  /**
+   * Obtains the next row from the result set from the statement that was
+   * executed.
+   *
+   * @returns the next row from the result set.  This will be null when there
+   *          are no more results.
+   */
+  nsIODBCStorageRow getNextRow();
+};

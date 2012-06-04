@@ -1,0 +1,9 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(396b378a-3b06-43ee-a35f-a1033636da0b)]
+interface nsISQLVoidCallback : nsISupports {
+
+  void handleEvent();
+
+};

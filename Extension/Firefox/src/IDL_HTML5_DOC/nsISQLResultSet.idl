@@ -1,0 +1,16 @@
+#include "nsISupports.idl"
+
+interface nsISQLResultSetRowList;
+interface nsISQLResultSetMetaData;
+
+[scriptable, uuid(b2cee61e-8740-4f5b-ab59-d305abfb6c69)]
+interface nsISQLResultSet : nsISupports {
+
+  readonly attribute long insertId;
+
+  readonly attribute long rowsAffected;
+
+  readonly attribute nsISQLResultSetRowList rows;
+
+  readonly attribute nsISQLResultSetMetaData metaData;
+};
