@@ -1,0 +1,19 @@
+OpenLink HTML5 WebDB to ODBC bridge
+===================================
+
+The OpenLink HTML5 WebDB-to-ODBC Bridge is a Web browser extension
+that enables the development of database-driven HTML5 (Javascript)
+applications, without binding to specific back-end database engines
+for data storage and access.
+
+Initially, the WebDB API component of HTML5 confined data access
+and storage to SQLite. This bridge to ODBC extends the functionality
+of the WebDB API to any ODBC- (or JDBC-, via additional ODBC-to-JDBC
+bridges) -accessible database. Such RDBMS engines include OpenLink
+Virtuoso, Oracle, Microsoft SQL Server, IBM DB2, IBM Informix,
+Sybase, Ingres, Progress, MySQL, PostgreSQL, Firebird, and many
+more.
+
+Documentation, binaries and installation instructions can be found at:
+
+http://wikis.openlinksw.com/dataspace/owiki/wiki/UdaWikiWeb/InstallConfigODBCHTML5Bridge
