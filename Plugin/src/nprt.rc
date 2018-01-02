@@ -51,7 +51,7 @@ BEGIN
             VALUE "FileOpenName", "npiodbc\0"
             VALUE "FileVersion", "1, 0, 3, 0\0"
             VALUE "InternalName", "npiodbc\0"
-            VALUE "LegalCopyright", "Copyright © 2011\0"
+            VALUE "LegalCopyright", "Copyright © 2018\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "MIMEType", "application/iodbc|application/iodbc-safari|application/iodbc-opera\0"
             VALUE "OriginalFilename", "npiodbc.dll\0"
