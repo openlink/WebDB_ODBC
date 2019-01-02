@@ -6,7 +6,7 @@
 [Setup]
 AppName=OpenLink HTML5 WebDB-to-ODBC (Bridge) Plugin
 AppVersion=1.0.3
-AppCopyright=Copyright (C) 2005-2018 OpenLink Software
+AppCopyright=Copyright (C) 2005-2019 OpenLink Software
 AppPublisher=OpenLink Software
 AppPublisherURL=http://uda.openlinksw.com
 AppSupportURL=http://uda.openlinksw.com
